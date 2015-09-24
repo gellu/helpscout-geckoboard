@@ -35,10 +35,31 @@ class HelpScout
 		return $mailbox['pages'];
 	}
 
+	public function getAllActivePagesCount($mailboxId)
+	{
+
+		$res = $this->client->request('GET',
+			'https://api.helpscout.net/v1/mailboxes/'. $mailboxId .'/conversations.json?status=active', $this->requestParams);
+
+		$mailbox = json_decode($res->getBody()->getContents(), true);
+
+		return $mailbox['pages'];
+	}
+
 	public function getConversations($mailboxId, $folderId, $page)
 	{
 		$res = $this->client->request('GET',
 			'https://api.helpscout.net/v1/mailboxes/'. $mailboxId .'/folders/'. $folderId.'/conversations.json?page='. $page,
+			$this->requestParams);
+		$mailbox = json_decode($res->getBody()->getContents(), true);
+
+		return $mailbox['items'];
+	}
+
+	public function getAllActiveConversations($mailboxId, $page)
+	{
+		$res = $this->client->request('GET',
+			'https://api.helpscout.net/v1/mailboxes/'. $mailboxId .'/conversations.json?status=active&page='. $page,
 			$this->requestParams);
 		$mailbox = json_decode($res->getBody()->getContents(), true);
 

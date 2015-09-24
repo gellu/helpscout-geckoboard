@@ -4,13 +4,6 @@
  * Date: 22.09.2015 17:24
  */
 
-
-//	X - przypisane do FO, starsze niż Y dni, nie zamknięte
-//	im X większe tym gorzej
-//	Z - przypisane do DEV, starsze (ostatnia odpowiedź) niż W dni, nie zamknięte
-//	im Z większe tym gorzej
-//	Z1 - przypisane do DEV, starsze (czas zgłoszenia - pierwsza wiadomość w konwersacji) niż W1 dni, nie zamknięte
-//	im Z1 większe tym gorzej
 //	H - nowych konwersacji bez odpowiedzi na FO dłużej niż J godzin
 //	im H większe tym gorzej
 
@@ -30,13 +23,29 @@ $app->notFound(function () use ($app) {
 	echo json_encode(array('status' => 'error', 'result' => 'Method not found'));
 });
 
-$app->get('/assigned-to-fo-by-age', function () use ($app, $config) {
+foreach($config['counter'] as $route => $cfg)
+{
+	$app->get('/'. $route, function () use ($app, $cfg)
+	{
+
+		$helpScout = new HelpScout(HELPSCOUT_API_KEY);
+
+		$parser = new HelpScoutParser($cfg, $helpScout);
+		$parser->parseLevels();
+		echo GeckoBoardFormatter::counterToRagFormatter($parser->getLevelCounter(), $cfg['levelNames']);
+
+
+	});
+}
+
+$app->get('/no-answer', function () use ($app, $config)
+{
 
 	$helpScout = new HelpScout(HELPSCOUT_API_KEY);
 
-	$parser = new HelpScoutParser($config['assigned-to-fo-by-age'], $helpScout);
-	$parser->parseLevels();
-	echo GeckoBoardFormatter::counterToRagFormatter($parser->getLevelCounter(), $config['assigned-to-fo-by-age']['levelNames']);
+	$parser = new HelpScoutParser($config['custom']['no-answer'], $helpScout);
+	$parser->parseLevelsUnassigned();
+	echo GeckoBoardFormatter::counterToRagFormatter($parser->getLevelCounter(), $config['custom']['no-answer']['levelNames']);
 
 
 });

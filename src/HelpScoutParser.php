@@ -51,8 +51,43 @@ class HelpScoutParser
 				elseif ($age >= $this->levels['warn'] && $age < $this->levels['critical'] )
 				{
 					$this->levelCounter['warn']++;
-				} else {
+				} elseif ($age >= $this->levels['critical']) {
 					$this->levelCounter['critical']++;
+				}
+			}
+
+			$currentPage++;
+		}
+	}
+
+	public function parseLevelsUnassigned()
+	{
+		$pages = $this->helpScout->getAllActivePagesCount($this->config['mailboxId']);
+
+		$currentPage = 1;
+
+		while ($currentPage <= $pages)
+		{
+			$conversations = $this->helpScout->getAllActiveConversations($this->config['mailboxId'], $currentPage);
+
+			foreach($conversations as $conversation)
+			{
+				if($conversation['threadCount'] == 1)
+				{
+					$age = time() - strtotime($conversation[$this->config['age_field']]);
+
+					if ($age < $this->levels['warn'])
+					{
+						$this->levelCounter['ok']++;
+					}
+					elseif ($age >= $this->levels['warn'] && $age < $this->levels['critical'])
+					{
+						$this->levelCounter['warn']++;
+					}
+					elseif ($age >= $this->levels['critical'])
+					{
+						$this->levelCounter['critical']++;
+					}
 				}
 			}
 
