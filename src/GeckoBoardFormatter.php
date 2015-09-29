@@ -22,7 +22,8 @@ class GeckoBoardFormatter
 	{
 		return json_encode([
 			'item' => [
-				['value' => round($data['happiness'], 2), 'text' => 'responses: '. $data['count']]
+				['value' 	=> round($data['happiness'], 2),
+				 'text' 	=> 'all responses: '. $data['countAll'] .'<br />great: '. $data['countGreat'] .'<br />ok: '. $data['countOk'] .'<br />not good: '. $data['countNotGood']]
 			]
 		]);
 	}

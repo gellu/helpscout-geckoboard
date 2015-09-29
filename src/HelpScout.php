@@ -96,7 +96,11 @@ class HelpScout
 		$res = $this->client->request('GET', 'https://api.helpscout.net/v1/reports/happiness.json?start='. $start . '&end='. $end .'&mailboxes='. $mailboxId, $this->requestParams);
 		$report = json_decode($res->getBody()->getContents(), true);
 
-		return ['happiness' => $report['current']['happinessScore'],
-				'count' 	=> $report['current']['ratingsCount']];
+		return ['happiness' 	=> $report['current']['happinessScore'],
+				'countAll' 		=> $report['current']['ratingsCount'],
+				'countGreat'	=> $report['current']['greatCount'],
+				'countOk'		=> $report['current']['okayCount'],
+				'countNotGood'	=> $report['current']['notGoodCount'],
+		];
 	}
 }
