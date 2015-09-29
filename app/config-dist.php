@@ -7,6 +7,25 @@
 const HELPSCOUT_API_KEY = '';
 
 $config = [
+	'custom' => [
+		'no-answer' => [
+			'mailboxId'	=> '',
+			'age_field'	=> '', 			# createdAt || userModifiedAt
+			'levels'	=> [
+				'ok'		=> '',
+				'warn'		=> '',
+				'critical'	=> ''
+			],
+			'levelNames' => [
+				'ok'		=> '',
+				'warn'		=> '',
+				'critical'	=> '',
+			]
+		],
+		'user-replies' => [
+			'mailboxId'	=> '',
+		]
+	],
 	'counter' => [
 		'name' => [
 			'mailboxId'	=> '',

@@ -27,7 +27,6 @@ foreach($config['counter'] as $route => $cfg)
 {
 	$app->get('/'. $route, function () use ($app, $cfg)
 	{
-
 		$helpScout = new HelpScout(HELPSCOUT_API_KEY);
 
 		$parser = new HelpScoutParser($cfg, $helpScout);
@@ -40,13 +39,21 @@ foreach($config['counter'] as $route => $cfg)
 
 $app->get('/no-answer', function () use ($app, $config)
 {
-
 	$helpScout = new HelpScout(HELPSCOUT_API_KEY);
 
 	$parser = new HelpScoutParser($config['custom']['no-answer'], $helpScout);
 	$parser->parseLevelsUnassigned();
 	echo GeckoBoardFormatter::counterToRagFormatter($parser->getLevelCounter(), $config['custom']['no-answer']['levelNames']);
 
+
+});
+
+$app->get('/user-happiness/:type', function ($type) use ($app, $config)
+{
+	$helpScout = new HelpScout(HELPSCOUT_API_KEY);
+
+	$resp = $helpScout->getHappinessRating($config['custom']['user-replies']['mailboxId'], $type);
+	echo GeckoBoardFormatter::happinessToNumberTextFormatter($resp);
 
 });
 
