@@ -13,6 +13,7 @@ class HelpScoutParser
 
 	protected $levels = [];
 	private $levelCounter = ['ok' => 0, 'warn' => 0, 'critical' => 0];
+	private $conversations = [];
 
 
 	public function __construct($config, HelpScout $helpScout)
@@ -36,6 +37,8 @@ class HelpScoutParser
 
 		$currentPage = 1;
 
+		$this->conversations = [];
+
 		while ($currentPage <= $pages)
 		{
 			$conversations = $this->helpScout->getConversations($this->config['mailboxId'], $this->config['folderId'], $currentPage);
@@ -47,12 +50,17 @@ class HelpScoutParser
 				if ($age < $this->levels['warn'])
 				{
 					$this->levelCounter['ok']++;
+					$this->conversations['ok'][] = $conversation;
 				}
 				elseif ($age >= $this->levels['warn'] && $age < $this->levels['critical'] )
 				{
 					$this->levelCounter['warn']++;
-				} elseif ($age >= $this->levels['critical']) {
+					$this->conversations['warn'][] = $conversation;
+				}
+				elseif ($age >= $this->levels['critical'])
+				{
 					$this->levelCounter['critical']++;
+					$this->conversations['critical'][] = $conversation;
 				}
 			}
 
@@ -65,6 +73,8 @@ class HelpScoutParser
 		$pages = $this->helpScout->getAllActivePagesCount($this->config['mailboxId']);
 
 		$currentPage = 1;
+
+		$this->conversations = [];
 
 		while ($currentPage <= $pages)
 		{
@@ -79,14 +89,17 @@ class HelpScoutParser
 					if ($age < $this->levels['warn'])
 					{
 						$this->levelCounter['ok']++;
+						$this->conversations['ok'][] = $conversation;
 					}
 					elseif ($age >= $this->levels['warn'] && $age < $this->levels['critical'])
 					{
 						$this->levelCounter['warn']++;
+						$this->conversations['warn'][] = $conversation;
 					}
 					elseif ($age >= $this->levels['critical'])
 					{
 						$this->levelCounter['critical']++;
+						$this->conversations['critical'][] = $conversation;
 					}
 				}
 			}
@@ -98,6 +111,21 @@ class HelpScoutParser
 	public function getLevelCounter()
 	{
 		return $this->levelCounter;
+	}
+
+	public function getConversationsNumbers()
+	{
+		$numbers = [];
+
+		foreach($this->conversations as $level => $conversations)
+		{
+			foreach($conversations as $conversation)
+			{
+				$numbers[$level][] = $conversation['number'];
+			}
+		}
+
+		return $numbers;
 	}
 
 }

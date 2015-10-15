@@ -27,4 +27,29 @@ class GeckoBoardFormatter
 			]
 		]);
 	}
+
+	public static function logToList($data)
+	{
+		$output = [];
+
+		foreach($data as $row)
+		{
+			if($row['msg'] == 0)
+			{
+				$output[] = [
+					'title' => ['text' => 'No tickets long past due'],
+					'label'	=> ['name' => $row['date'], 'color' => '#90C564']
+				];
+			}
+			else {
+				$output[] = [
+					'title' 		=> ['text' => $row['msg'] .' long past due'],
+					'label'			=> ['name' => $row['date'], 'color' => '#E3524F'],
+					'description'	=> 'tickets: '. $row['numbers'],
+				];
+			}
+
+		}
+		echo json_encode($output);
+	}
 }
