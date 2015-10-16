@@ -40,7 +40,7 @@ $app->get('/log-assigned-to-fo-by-age', function() use ($app, $cfg) {
 	$conversationNumbers = $parser->getConversationsNumbers();
 
 	$msg = [
-		'date' 		=> date('d-m-Y', time()),
+		'date' 		=> date('l', time()),
 		'msg'		=> count($conversationNumbers['critical']),
 		'numbers'	=> implode(',', $conversationNumbers['critical'])
 	];
