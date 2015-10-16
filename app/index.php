@@ -60,7 +60,7 @@ $app->get('/user-happiness/:type', function ($type) use ($app, $config)
 $app->get('/log-assigned-to-fo-by-age', function () use ($app, $config)
 {
 	$logger = new Logger('log-assigned-to-fo-by-age.log');
-	echo GeckoBoardFormatter::logToList($logger->getLogFileContents());
+	echo GeckoBoardFormatter::logToList(array_reverse($logger->getLogFileContents()));
 });
 
 $app->run();

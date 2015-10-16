@@ -50,6 +50,6 @@ class GeckoBoardFormatter
 			}
 
 		}
-		echo json_encode($output);
+		return json_encode($output);
 	}
 }
