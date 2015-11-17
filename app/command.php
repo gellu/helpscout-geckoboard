@@ -57,8 +57,7 @@ $app->get('/log-support-reply', function() use ($app, $cfg) {
 	$parser->parseLevelsUnassigned();
 	$parser->getLevelCounter();
 	$conversationNumbers = $parser->getConversationsNumbers();
-var_dump($conversationNumbers);
-	die();
+
 	$msg = [
 			'date' 		=> date('l', time()),
 			'msg'		=> count($conversationNumbers['critical']),
