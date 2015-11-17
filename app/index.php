@@ -63,7 +63,7 @@ $app->get('/log-assigned-to-fo-by-age', function () use ($app, $config)
 	echo GeckoBoardFormatter::logToList(array_reverse($logger->getLogFileContents()));
 });
 
-$app->get('/log-assigned-to-fo-by-age', function () use ($app, $config)
+$app->get('/log-support-reply', function () use ($app, $config)
 {
 	$logger = new Logger('log-support-reply.log');
 	echo GeckoBoardFormatter::logToList(array_reverse($logger->getLogFileContents()));
