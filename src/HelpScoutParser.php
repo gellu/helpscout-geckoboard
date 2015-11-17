@@ -133,7 +133,7 @@ class HelpScoutParser
 
 	public function getConversationsNumbers()
 	{
-		$numbers = [];
+		$numbers = ['ok' => [], 'warn' => [], 'critical' => []];
 
 		foreach($this->conversations as $level => $conversations)
 		{
