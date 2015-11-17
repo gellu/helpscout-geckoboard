@@ -8,7 +8,7 @@ class Logger
 {
 
 	const LOG_DIR = '../log/';
-	const LOG_LIMIT  = 7;
+	const LOG_LIMIT  = 6;
 
 	private $fileName;
 	private $fileContents = [];
