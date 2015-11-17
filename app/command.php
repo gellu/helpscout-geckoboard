@@ -29,7 +29,6 @@ $app->environment = Slim\Environment::mock([
 ]);
 
 $cfg = $config['counter']['assigned-to-fo-by-age'];
-
 $app->get('/log-assigned-to-fo-by-age', function() use ($app, $cfg) {
 
 	$helpScout = new HelpScout(HELPSCOUT_API_KEY);
@@ -42,10 +41,31 @@ $app->get('/log-assigned-to-fo-by-age', function() use ($app, $cfg) {
 	$msg = [
 		'date' 		=> date('l', time()),
 		'msg'		=> count($conversationNumbers['critical']),
-		'numbers'	=> implode(',', $conversationNumbers['critical'])
+		'numbers'	=> (is_array($conversationNumbers['critical']) ? implode(',', $conversationNumbers['critical']) : "")
 	];
 
 	$logger = new Logger('log-assigned-to-fo-by-age.log');
+	$logger->log($msg);
+});
+
+$cfg = $config['counter']['support-reply'];
+$app->get('/log-support-reply', function() use ($app, $cfg) {
+
+	$helpScout = new HelpScout(HELPSCOUT_API_KEY);
+
+	$parser = new HelpScoutParser($cfg, $helpScout);
+	$parser->parseLevelsUnassigned();
+	$parser->getLevelCounter();
+	$conversationNumbers = $parser->getConversationsNumbers();
+var_dump($conversationNumbers);
+	die();
+	$msg = [
+			'date' 		=> date('l', time()),
+			'msg'		=> count($conversationNumbers['critical']),
+			'numbers'	=> (is_array($conversationNumbers['critical']) ? implode(',', $conversationNumbers['critical']) : "")
+	];
+
+	$logger = new Logger('log-support-reply.log');
 	$logger->log($msg);
 });
 

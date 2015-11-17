@@ -27,7 +27,12 @@ class HelpScoutParser
 	{
 		foreach($this->config['levels'] as $k => $v)
 		{
-			$this->levels[$k] = $v*60*60;
+			if(is_int($v))
+			{
+				$this->levels[$k] = $v * 60 * 60;
+			} else {
+				$this->levels[$k] = $v;
+			}
 		}
 	}
 
@@ -62,6 +67,13 @@ class HelpScoutParser
 					$this->levelCounter['critical']++;
 					$this->conversations['critical'][] = $conversation;
 				}
+
+				if(isset($this->levels['before']) && strtotime(date('Y-m-d', time()) . ' '. $this->levels['before'])-time() < 0 )
+				{
+					$this->levelCounter['critical']++;
+					$this->conversations['critical'][] = $conversation;
+				}
+
 			}
 
 			$currentPage++;
@@ -97,6 +109,12 @@ class HelpScoutParser
 						$this->conversations['warn'][] = $conversation;
 					}
 					elseif ($age >= $this->levels['critical'])
+					{
+						$this->levelCounter['critical']++;
+						$this->conversations['critical'][] = $conversation;
+					}
+
+					if(isset($this->levels['before']) && strtotime(date('Y-m-d', time()) . ' '. $this->levels['before'])-time() < 0 )
 					{
 						$this->levelCounter['critical']++;
 						$this->conversations['critical'][] = $conversation;
