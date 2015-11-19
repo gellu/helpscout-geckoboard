@@ -35,7 +35,7 @@ class Logger
 					$rowLabeled = [];
 					foreach($row as $k => $v)
 					{
-						$rowLabeled[$labels[$k]] = $v;
+						@$rowLabeled[$labels[$k]] = $v;
 					}
 					$this->fileContents[] = $rowLabeled;
 				}
